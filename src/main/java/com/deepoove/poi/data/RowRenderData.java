@@ -15,77 +15,90 @@
  */
 package com.deepoove.poi.data;
 
+import com.deepoove.poi.data.style.TableStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.deepoove.poi.data.style.TableStyle;
-
 /**
  * 表格行数据
- * 
+ *
  * @author Sayi
  * @version 1.3.0
  */
 public class RowRenderData implements RenderData {
 
-    private List<CellRenderData> cells;
+  private List<CellRenderData> cells;
 
-    /**
-     * 行级样式，应用到该行所有单元格：背景色、行文字对齐方式
-     */
-    private TableStyle rowStyle;
+  /**
+   * 行级样式，应用到该行所有单元格：背景色、行文字对齐方式
+   */
+  private TableStyle rowStyle;
 
-    public RowRenderData() {}
+  public RowRenderData() {
+  }
 
-    public RowRenderData(List<CellRenderData> cellDatas) {
-        this.cells = cellDatas;
+  public RowRenderData(List<CellRenderData> cellDatas) {
+    this.cells = cellDatas;
+  }
+
+  public static RowRenderData build(String... cellStr) {
+    List<TextRenderData> cellDatas = new ArrayList<TextRenderData>();
+    if (null != cellStr) {
+      for (String col : cellStr) {
+        cellDatas.add(new TextRenderData(col));
+      }
+    }
+    return new RowRenderData(cellDatas, null);
+  }
+
+  public static RowRenderData build(TextRenderData... cellData) {
+    return new RowRenderData(null == cellData ? null : Arrays.asList(cellData), null);
+  }
+
+  public static RowRenderData build(PictureRenderData... cellPic) {
+    return new RowRenderData(null == cellPic ? null : Arrays.asList(cellPic), (String) null);
+  }
+
+  public RowRenderData(List rowData, String backgroundColor) {
+    this.cells = new ArrayList();
+    if (null != rowData) {
+      if (TextRenderData.class.isInstance(rowData.get(0))) {
+        rowData.forEach(x -> this.cells.add(new CellRenderData((TextRenderData) x)));
+      }
+
+      if (PictureRenderData.class.isInstance(rowData.get(0))) {
+        rowData.forEach(x -> this.cells.add(new CellRenderData((PictureRenderData) x)));
+      }
+
+      if (String.class.isInstance(rowData.get(0))) {
+        rowData.forEach(x -> this.cells.add(new CellRenderData(new TextRenderData((String) x))));
+      }
     }
 
-    public static RowRenderData build(String... cellStr) {
-        List<TextRenderData> cellDatas = new ArrayList<TextRenderData>();
-        if (null != cellStr) {
-            for (String col : cellStr) {
-                cellDatas.add(new TextRenderData(col));
-            }
-        }
-        return new RowRenderData(cellDatas, null);
-    }
+    TableStyle style = new TableStyle();
+    style.setBackgroundColor(backgroundColor);
+    this.rowStyle = style;
+  }
 
-    public static RowRenderData build(TextRenderData... cellData) {
-        return new RowRenderData(null == cellData ? null : Arrays.asList(cellData), null);
-    }
+  public int size() {
+    return null == cells ? 0 : cells.size();
+  }
 
-    public RowRenderData(List<TextRenderData> rowData, String backgroundColor) {
-        this.cells = new ArrayList<CellRenderData>();
-        if (null != rowData) {
-            for (TextRenderData data : rowData) {
-                this.cells.add(new CellRenderData(data));
-            }
-        }
-        TableStyle style = new TableStyle();
-        style.setBackgroundColor(backgroundColor);
-        this.rowStyle = style;
-    }
+  public List<CellRenderData> getCells() {
+    return cells;
+  }
 
-    public int size() {
-        return null == cells ? 0 : cells.size();
-    }
+  public void setCells(List<CellRenderData> cellDatas) {
+    this.cells = cellDatas;
+  }
 
-    public List<CellRenderData> getCells() {
-        return cells;
-    }
+  public TableStyle getRowStyle() {
+    return rowStyle;
+  }
 
-    public void setCells(List<CellRenderData> cellDatas) {
-        this.cells = cellDatas;
-    }
-
-    public TableStyle getRowStyle() {
-        return rowStyle;
-    }
-
-    public void setRowStyle(TableStyle style) {
-        this.rowStyle = style;
-    }
+  public void setRowStyle(TableStyle style) {
+    this.rowStyle = style;
+  }
 
 }

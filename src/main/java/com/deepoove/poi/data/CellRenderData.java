@@ -19,44 +19,57 @@ import com.deepoove.poi.data.style.TableStyle;
 
 /**
  * 单元格数据
- * 
+ *
  * @author Sayi
  * @version 1.5.0
  */
 public class CellRenderData {
 
-    protected TextRenderData cellText;
+	protected TextRenderData cellText;
+	protected PictureRenderData pictureRenderData;
+	/**
+	 * 单元格级别的样式：背景色、单元格文字对齐方式
+	 */
+	protected TableStyle cellStyle;
 
-    /**
-     * 单元格级别的样式：背景色、单元格文字对齐方式
-     */
-    protected TableStyle cellStyle;
+	public CellRenderData() {
+	}
 
-    public CellRenderData() {}
+	public CellRenderData(TextRenderData renderData) {
+		this.cellText = renderData;
+	}
 
-    public CellRenderData(TextRenderData renderData) {
-        this.cellText = renderData;
-    }
+	public CellRenderData(PictureRenderData pictureRenderData) {
+		this.pictureRenderData = pictureRenderData;
+	}
 
-    public CellRenderData(TextRenderData renderData, TableStyle cellStyle) {
-        this.cellText = renderData;
-        this.cellStyle = cellStyle;
-    }
+	public PictureRenderData getPictureRenderData() {
+		return this.pictureRenderData;
+	}
 
-    public TextRenderData getCellText() {
-        return cellText;
-    }
+	public void setPictureRenderData(PictureRenderData pictureRenderData) {
+		this.pictureRenderData = pictureRenderData;
+	}
 
-    public void setCellText(TextRenderData renderData) {
-        this.cellText = renderData;
-    }
+	public CellRenderData(TextRenderData renderData, TableStyle cellStyle) {
+		this.cellText = renderData;
+		this.cellStyle = cellStyle;
+	}
 
-    public TableStyle getCellStyle() {
-        return cellStyle;
-    }
+	public TextRenderData getCellText() {
+		return this.cellText;
+	}
 
-    public void setCellStyle(TableStyle cellStyle) {
-        this.cellStyle = cellStyle;
-    }
+	public void setCellText(TextRenderData renderData) {
+		this.cellText = renderData;
+	}
+
+	public TableStyle getCellStyle() {
+		return this.cellStyle;
+	}
+
+	public void setCellStyle(TableStyle cellStyle) {
+		this.cellStyle = cellStyle;
+	}
 
 }

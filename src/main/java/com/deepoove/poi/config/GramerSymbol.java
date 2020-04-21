@@ -17,64 +17,76 @@ package com.deepoove.poi.config;
 
 /**
  * 默认模板语法
- * 
+ *
  * @author Sayi
  */
 public enum GramerSymbol {
 
-    /**
-     * 图片
-     */
-    IMAGE('@'),
+  /**
+   * 图片
+   */
+  IMAGE('@'),
 
-    /**
-     * 文本
-     */
-    TEXT('\0'),
+  /**
+   * 文本
+   */
+  TEXT('\0'),
 
-    /**
-     * 文本别名，兼容#this写法不与现有的表格写法冲突：{{=#this}}
-     */
-    TEXT_ALIAS('='),
+  /**
+   * 文本别名，兼容#this写法不与现有的表格写法冲突：{{=#this}}
+   */
+  TEXT_ALIAS('='),
 
-    /**
-     * 表格
-     */
-    TABLE('#'),
+  /**
+   * 表格
+   */
+  TABLE('#'),
 
-    /**
-     * 列表
-     */
-    NUMBERIC('*'),
+  /**
+   * 列表
+   */
+  NUMBERIC('*'),
 
-    /**
-     * 引用
-     */
-    DOCX_TEMPLATE('+'),
+  /**
+   * 引用
+   */
+  DOCX_TEMPLATE('+'),
 
-    /**
-     * 循环(if & for each)语法块起始
-     */
-    ITERABLE_START('?'),
+  /**
+   * 循环(if & for each)语法块起始
+   */
+  ITERABLE_START('?'),
 
-    /**
-     * 语法块结束
-     */
-    BLOCK_END('/');
+  /**
+   * 语法块结束
+   */
+  BLOCK_END('/'),
+  /**
+   * 自定义表格
+   */
+  CUSTOMTABLE('%'),
+  /**
+   * 自定义表格列表
+   */
+  CUSTOMTABLELIST('-'),
+  /**
+   * 自定义图片列表
+   */
+  PICTURELIST('$');
 
-    private char symbol;
+  private char symbol;
 
-    private GramerSymbol(char symbol) {
-        this.symbol = symbol;
-    }
+  private GramerSymbol(char symbol) {
+    this.symbol = symbol;
+  }
 
-    public char getSymbol() {
-        return this.symbol;
-    }
+  public char getSymbol() {
+    return this.symbol;
+  }
 
-    @Override
-    public String toString() {
-        return String.valueOf(this.symbol);
-    }
+  @Override
+  public String toString() {
+    return String.valueOf(this.symbol);
+  }
 
 }

@@ -15,58 +15,69 @@
  */
 package com.deepoove.poi.render;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
+import com.deepoove.poi.data.CustomTableListRenderData;
+import com.deepoove.poi.data.CustomTableRenderData;
 import com.deepoove.poi.data.MiniTableRenderData;
 import com.deepoove.poi.data.NumbericRenderData;
 import com.deepoove.poi.data.PictureRenderData;
+import com.deepoove.poi.policy.CustomTableRenderPolicy;
 import com.deepoove.poi.policy.MiniTableRenderPolicy;
 import com.deepoove.poi.policy.NumbericRenderPolicy;
 import com.deepoove.poi.policy.PictureRenderPolicy;
 import com.deepoove.poi.policy.TextRenderPolicy;
+import java.io.IOException;
+import java.io.InputStream;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 /**
  * 对当前位置的委托，提供更多操作当前位置的方法。
- * 
+ *
  * @author Sayi
  * @version 1.5.1
  */
 public class WhereDelegate {
 
-    private final XWPFRun run;
+  private final XWPFRun run;
 
-    public WhereDelegate(XWPFRun run) {
-        this.run = run;
-    }
+  public WhereDelegate(XWPFRun run) {
+    this.run = run;
+  }
 
-    public XWPFRun getRun() {
-        return this.run;
-    }
+  public XWPFRun getRun() {
+    return this.run;
+  }
 
-    public void renderText(Object data) {
-        TextRenderPolicy.Helper.renderTextRun(run, data);
-    }
+  public void renderText(Object data) {
+    TextRenderPolicy.Helper.renderTextRun(run, data);
+  }
 
-    public void renderNumberic(NumbericRenderData data) throws Exception {
-        NumbericRenderPolicy.Helper.renderNumberic(run, data);
-    }
+  public void renderNumberic(NumbericRenderData data) throws Exception {
+    NumbericRenderPolicy.Helper.renderNumberic(run, data);
+  }
 
-    public void renderPicture(PictureRenderData data) throws Exception {
-        PictureRenderPolicy.Helper.renderPicture(run, data);
-    }
+  public void renderPicture(PictureRenderData data) throws Exception {
+    PictureRenderPolicy.Helper.renderPicture(run, data);
+  }
 
-    public void renderMiniTable(MiniTableRenderData data) {
-        MiniTableRenderPolicy.Helper.renderMiniTable(run, data);
-    }
+  public void renderMiniTable(MiniTableRenderData data) {
+    MiniTableRenderPolicy.Helper.renderMiniTable(run, data);
+  }
 
-    public void addPicture(InputStream inputStream, int type, int width, int height)
-            throws InvalidFormatException, IOException {
-        run.addPicture(inputStream, type, "Generated", width * PictureRenderPolicy.Helper.EMU,
-                height * PictureRenderPolicy.Helper.EMU);
+  public void renderCustomTable(CustomTableRenderData data) {
+    CustomTableRenderPolicy.Helper.renderCustomTable(run, data);
+  }
+
+  public void renderListCustomTable(CustomTableListRenderData data) {
+    for (CustomTableRenderData table : data.getTableList()) {
+      CustomTableRenderPolicy.Helper.renderCustomTable(run, table);
     }
+  }
+
+  public void addPicture(InputStream inputStream, int type, int width, int height)
+      throws InvalidFormatException, IOException {
+    run.addPicture(inputStream, type, "Generated", width * PictureRenderPolicy.Helper.EMU,
+        height * PictureRenderPolicy.Helper.EMU);
+  }
 
 }

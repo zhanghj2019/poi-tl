@@ -15,50 +15,57 @@
  */
 package com.deepoove.poi.policy;
 
-import java.util.List;
-
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
+import com.deepoove.poi.data.CustomTableListRenderData;
+import com.deepoove.poi.data.CustomTableRenderData;
 import com.deepoove.poi.data.MiniTableRenderData;
 import com.deepoove.poi.data.NumbericRenderData;
+import com.deepoove.poi.data.PictureListRenderData;
 import com.deepoove.poi.data.PictureRenderData;
 import com.deepoove.poi.data.TextRenderData;
 import com.deepoove.poi.render.RenderContext;
 import com.deepoove.poi.util.StyleUtils;
 import com.deepoove.poi.xwpf.BodyContainer;
 import com.deepoove.poi.xwpf.BodyContainerFactory;
+import java.util.List;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 public class ListRenderPolicy extends AbstractRenderPolicy<List<Object>> {
 
-    @Override
-    protected boolean validate(List<Object> data) {
-        return (null != data && !data.isEmpty());
-    }
+  @Override
+  protected boolean validate(List<Object> data) {
+    return (null != data && !data.isEmpty());
+  }
 
-    @Override
-    public void doRender(RenderContext<List<Object>> context) throws Exception {
-        XWPFRun run = context.getRun();
-        BodyContainer bodyContainer = BodyContainerFactory.getBodyContainer(run);
-        List<Object> datas = context.getData();
-        for (Object data : datas) {
-            if (data instanceof TextRenderData) {
-                XWPFRun createRun = bodyContainer.insertNewParagraph(run).createRun();
-                StyleUtils.styleRun(createRun, run);
-                TextRenderPolicy.Helper.renderTextRun(createRun, data);
-            } else if (data instanceof MiniTableRenderData) {
-                MiniTableRenderPolicy.Helper.renderMiniTable(run, (MiniTableRenderData) data);
-            } else if (data instanceof NumbericRenderData) {
-                NumbericRenderPolicy.Helper.renderNumberic(run, (NumbericRenderData) data);
-            } else if (data instanceof PictureRenderData) {
-                PictureRenderPolicy.Helper.renderPicture(bodyContainer.insertNewParagraph(run).createRun(),
-                        (PictureRenderData) data);
-            }
-        }
+  @Override
+  public void doRender(RenderContext<List<Object>> context) throws Exception {
+    XWPFRun run = context.getRun();
+    BodyContainer bodyContainer = BodyContainerFactory.getBodyContainer(run);
+    List<Object> datas = context.getData();
+    for (Object data : datas) {
+      if (data instanceof TextRenderData) {
+        XWPFRun createRun = bodyContainer.insertNewParagraph(run).createRun();
+        StyleUtils.styleRun(createRun, run);
+        TextRenderPolicy.Helper.renderTextRun(createRun, data);
+      } else if (data instanceof MiniTableRenderData) {
+        MiniTableRenderPolicy.Helper.renderMiniTable(run, (MiniTableRenderData) data);
+      } else if (data instanceof NumbericRenderData) {
+        NumbericRenderPolicy.Helper.renderNumberic(run, (NumbericRenderData) data);
+      } else if (data instanceof PictureRenderData) {
+        PictureRenderPolicy.Helper.renderPicture(bodyContainer.insertNewParagraph(run).createRun(),
+            (PictureRenderData) data);
+      } else if (data instanceof CustomTableRenderData) {
+        CustomTableRenderPolicy.Helper.renderCustomTable(run, (CustomTableRenderData) data);
+      } else if (data instanceof CustomTableListRenderData) {
+        CustomTableListRenderPolicy.Helper.renderCustomTableList(run, (CustomTableListRenderData) data);
+      } else if (data instanceof PictureListRenderData) {
+        PictureListRenderPolicy.Helper.renderPictureList(run, (PictureListRenderData) data);
+      }
     }
+  }
 
-    @Override
-    protected void afterRender(RenderContext<List<Object>> context) {
-        clearPlaceholder(context, true);
-    }
+  @Override
+  protected void afterRender(RenderContext<List<Object>> context) {
+    clearPlaceholder(context, true);
+  }
 
 }

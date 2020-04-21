@@ -15,94 +15,89 @@
  */
 package com.deepoove.poi.data;
 
+import com.deepoove.poi.util.ByteUtils;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-import com.deepoove.poi.util.ByteUtils;
-
 /**
  * 待合并子文档和数据集合
- * 
+ *
  * @author Sayi
  * @version 1.3.0
  */
 public class DocxRenderData implements RenderData {
 
-    /**
-     * stream流无法重用，使用字节数组表示待合并文档
-     */
-    private transient byte[] mergeBytes;
-    
-    @SuppressWarnings("unused")
-    private File file;
+  /**
+   * stream流无法重用，使用字节数组表示待合并文档
+   */
+  private transient byte[] mergeBytes;
 
-    /**
-     * 渲染待合并文档模板的数据集合，若合并文档不是个模板，可为空
-     */
-    private List<?> dataModels;
+  @SuppressWarnings("unused")
+  private File file;
 
-    /**
-     * @param docx
-     *            子文档
-     */
-    public DocxRenderData(File docx) {
-        this(docx, null);
-    }
+  /**
+   * 渲染待合并文档模板的数据集合，若合并文档不是个模板，可为空
+   */
+  private List<?> dataModels;
+  private Boolean pageBefore;
+  private Boolean pageAfter;
 
-    /**
-     * 构造子文档和渲染数据源
-     * 
-     * @param docx
-     *            子文档
-     * @param renderDatas
-     *            渲染数据列表，列表的大小表示循环的次数
-     */
-    public DocxRenderData(File docx, List<?> renderDatas) {
-        this(ByteUtils.getLocalByteArray(docx), renderDatas);
-        this.file = docx;
-    }
+  public DocxRenderData(File docx, Boolean pageBefore, Boolean pageAfter) {
+    this((File) docx, (List) null, pageBefore, pageAfter);
+  }
 
-    /**
-     * @param inputStream
-     *            子文档流
-     */
-    public DocxRenderData(InputStream inputStream) {
-        this(inputStream, null);
-    }
+  public DocxRenderData(File docx, List<?> renderDatas, Boolean pageBefore, Boolean pageAfter) {
+    this(ByteUtils.getLocalByteArray(docx), renderDatas, pageBefore, pageAfter);
+    this.file = docx;
+  }
 
-    /**
-     * @param inputStream
-     * @param renderDatas
-     */
-    public DocxRenderData(InputStream inputStream, List<?> renderDatas) {
-        this(ByteUtils.toByteArray(inputStream), renderDatas);
-    }
+  public DocxRenderData(InputStream inputStream, Boolean pageBefore, Boolean pageAfter) {
+    this((InputStream) inputStream, (List) null, pageBefore, pageAfter);
+  }
 
-    /**
-     * @param input
-     *            子文档字节数组
-     * @param renderDatas
-     */
-    public DocxRenderData(byte[] input, List<?> renderDatas) {
-        this.dataModels = renderDatas;
-        this.mergeBytes = input;
-    }
+  public DocxRenderData(InputStream inputStream, List<?> renderDatas, Boolean pageBefore, Boolean pageAfter) {
+    this(ByteUtils.toByteArray(inputStream), renderDatas, pageBefore, pageAfter);
+  }
 
-    public byte[] getDocx() {
-        return mergeBytes;
-    }
+  public DocxRenderData(byte[] input, List<?> renderDatas, Boolean pageBefore, Boolean pageAfter) {
+    this.dataModels = renderDatas;
+    this.mergeBytes = input;
+    this.pageBefore = pageBefore;
+    this.pageAfter = pageAfter;
+  }
 
-    public List<?> getDataModels() {
-        return dataModels;
-    }
+  public byte[] getDocx() {
+    return this.mergeBytes;
+  }
 
-    public void setDataModels(List<?> renderDatas) {
-        this.dataModels = renderDatas;
-    }
-    
-    public void setRenderDatas(List<?> renderDatas) {
-        this.dataModels = renderDatas;
-    }
+  public List<?> getDataModels() {
+    return this.dataModels;
+  }
+
+  public void setDataModels(List<?> renderDatas) {
+    this.dataModels = renderDatas;
+  }
+
+  public void setRenderDatas(List<?> renderDatas) {
+    this.dataModels = renderDatas;
+  }
+
+  public Boolean getPageBefore() {
+    return this.pageBefore;
+  }
+
+
+  public void setPageBefore(Boolean pageBefore) {
+    this.pageBefore = pageBefore;
+  }
+
+  public void setPageAfter(Boolean pageAfter) {
+    this.pageAfter = pageAfter;
+  }
+
+  public Boolean getPageAfter() {
+    return this.pageAfter;
+  }
 
 }
